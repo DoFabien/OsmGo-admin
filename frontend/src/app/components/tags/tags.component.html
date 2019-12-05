@@ -1,0 +1,216 @@
+
+<mat-toolbar color="primary">
+    <button mat-button routerLink="/"> <mat-icon>home</mat-icon></button>
+    {{this.tagsService.language }}
+    <button mat-button [routerLink]="'/presets/'+this.tagsService.language"> Presets </button>
+
+</mat-toolbar>
+
+<!-- <div class="primaryKey">
+  <mat-form-field>
+    <mat-select placeholder="Key" [(value)]="selectedTagKey" (selectionChange)="selectKeyTagChange($event)">
+      <mat-option *ngFor="let key of tagsService.tagsConfig | keys  " [value]="key">
+        {{tagsService.tagsConfig[key]?.lbl[tagsService.language] ? tagsService.tagsConfig[key]?.lbl[tagsService.language]  : tagsService.tagsConfig[key]?.lbl['en'] }}  ({{ key}})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="openDialogAddPrimaryValue(selectedTagKey)"> <mat-icon>add </mat-icon>  Add tag </button>
+
+  <button mat-raised-button color="primary" (click)="openDialogSettingsPkey(selectedTagKey)"> 
+      <mat-icon>settings</mat-icon> 
+     {{ selectedTagKey}} 
+  </button>
+
+
+</div> -->
+<form >
+    <mat-form-field class="example-full-width">
+      <input matInput  placeholder="Search" [value]="searchTerm" autocomplete="off"  (keyup)='keyUp.next($event)'>
+    </mat-form-field>
+  </form>
+
+<div class="primaryValue">
+  <table style="width: 100%;">
+    <tr>
+      <th>icon</th>
+      <th></th>
+      <th class="pointer">Key</th>
+      <th (click)="changeOrder('lbl')" class="pointer">Label</th>
+      <th>Presets</th>
+
+      <!-- <th (click)="changeOrder('_percentage')" class="pointer">%</th> -->
+      <th (click)="changeOrder('time')" class="pointer"> time </th>
+    </tr>
+    <tr
+      *ngFor="let primaryTagValueConfig of tagsService.tagsConfig | searchTags:searchTerm:tagsService.language | orderBy:[ orderKey , orderType ]"
+      (click)="tagValueConfigChange(primaryTagValueConfig)" class="pointer" [ngClass]="{'selectedRow': selectedTagValueConfig && primaryTagValueConfig.id == selectedTagValueConfig.id}" >
+      <td>
+        <!-- {{primaryTagValueConfig.key | json}} -->
+        <div style="width: 32px;min-height: 32px;height: 100%;"
+          [ngStyle]="{'background-color': primaryTagValueConfig && primaryTagValueConfig.markerColor ? primaryTagValueConfig.markerColor : '#3f51b5'}">
+          <img *ngIf="primaryTagValueConfig.icon" width="24px" height="24px" style="padding: 4px" class="svg-icon"
+            [src]="'./api/svg/'+ primaryTagValueConfig.icon" />
+        </div>
+      </td>
+
+      <td>
+        <mat-icon *ngIf="primaryTagValueConfig.deprecated"> warning</mat-icon>
+      </td>
+      <td>{{primaryTagValueConfig.tags | json}}</td>
+      <td>{{primaryTagValueConfig.lbl[tagsService.language] ? primaryTagValueConfig.lbl[tagsService.language] : null}}</td>
+      <td>{{primaryTagValueConfig.presets.length}}</td>
+
+      <!-- <td> {{primaryTagValueConfig._percentage }}</td> -->
+      <td> {{primaryTagValueConfig?.time | date:'short' }}</td>
+    </tr>
+  </table>
+
+</div>
+
+<div class="presets" *ngIf="selectedTagValueConfig">
+
+  <h4> {{ selectedTagValueConfig.tags | json}} </h4>
+  <div style="width: 32px;height: 32px; display: inline-block"
+    [ngStyle]="{'background-color': selectedTagValueConfig.markerColor}"
+    (click)="openDialogIconsSelector(selectedTagValueConfig)">
+    <img *ngIf="selectedTagValueConfig.icon" width="24px" height="24px" style="padding: 4px" class="svg-icon"
+      [src]="'./api/svg/'+ selectedTagValueConfig.icon" />
+
+
+  </div>
+  <div *ngIf="selectedTagValueConfig.icon"> {{ selectedTagValueConfig.icon }}</div>
+
+<button mat-raised-button style="margin: 5px; display:block" (click)="toOsmPage(selectedTagValueConfig.tags)"> OSM WIKI</button>
+
+<mat-slide-toggle [(ngModel)]="isDeleteConfirm">delete this tag ?</mat-slide-toggle>
+
+<button mat-raised-button [disabled]='!isDeleteConfirm' (click)="deleteTag(selectedTagValueConfig.id)" color="warn">DELETE</button>
+
+
+<section class="example-section">
+  <mat-checkbox class="example-margin" [checked]="selectedTagValueConfig.geometry.includes('point')"
+  (change)="changeGeometry($event.checked, 'point', selectedTagValueConfig.id, selectedTagValueConfig.geometry)"
+  > point</mat-checkbox>
+  <mat-checkbox class="example-margin" [checked]="selectedTagValueConfig.geometry.includes('vertex')"
+  (change)="changeGeometry($event.checked, 'vertex', selectedTagValueConfig.id, selectedTagValueConfig.geometry)"
+  > vertex</mat-checkbox>
+  <mat-checkbox class="example-margin" [checked]="selectedTagValueConfig.geometry.includes('area')"
+  (change)="changeGeometry($event.checked, 'area', selectedTagValueConfig.id, selectedTagValueConfig.geometry)"
+  > area</mat-checkbox>
+  <mat-checkbox class="example-margin" [checked]="selectedTagValueConfig.geometry.includes('line')"
+  (change)="changeGeometry($event.checked, 'line', selectedTagValueConfig.id, selectedTagValueConfig.geometry)"
+  > line</mat-checkbox>
+</section>
+
+
+ <!-- LABEL -->
+  <mat-form-field style="width: 100%;">
+    <input matInput [value]="selectedTagValueConfig.lbl && selectedTagValueConfig.lbl[tagsService.language] ? selectedTagValueConfig.lbl[tagsService.language] : null"  
+    (change)="tagConfigChange($event.target.value, 'lbl', selectedTagValueConfig.id, tagsService.language)" 
+    autocomplete="off" 
+    placeholder="Label"
+    style="font-weight: bolder; font-size: 1.5em;">
+  </mat-form-field>
+
+  <!-- TERMS -->
+  <mat-form-field style="width: 100%;">
+    <input matInput [value]="selectedTagValueConfig.terms && selectedTagValueConfig.terms[tagsService.language] ? selectedTagValueConfig.terms[tagsService.language] : '' " autocomplete="off" 
+    (change)="tagConfigChange($event.target.value, 'terms', selectedTagValueConfig.id, tagsService.language)" 
+      placeholder="terms">
+  </mat-form-field>
+<!-- DESCRITPION -->
+  <mat-form-field style="width: 100%;">
+    <input matInput 
+    [value] = "selectedTagValueConfig.description && selectedTagValueConfig.description[tagsService.language] ? selectedTagValueConfig.description[tagsService.language] : ''" autocomplete="off" 
+    (change)="tagConfigChange($event.target.value, 'description', selectedTagValueConfig.id, tagsService.language)" 
+      placeholder="description">
+  </mat-form-field>
+
+  <!-- ALERT -->
+  <mat-form-field style="width: 100%; color:red;">
+    <input matInput 
+    [value] = "selectedTagValueConfig.alert && selectedTagValueConfig.alert[tagsService.language] ? selectedTagValueConfig.alert[tagsService.language] : ''"
+    (change)="tagConfigChange($event.target.value, 'alert', selectedTagValueConfig.id, tagsService.language)" 
+    autocomplete="off"
+      placeholder="Alert">
+  </mat-form-field>
+
+  <!-- WARNING -->
+  <mat-form-field style="width: 100%; color:orange;">
+    <input matInput 
+    [value] = "selectedTagValueConfig.warning && selectedTagValueConfig.warning[tagsService.language] ? selectedTagValueConfig.warning[tagsService.language] : ''"
+    (change)="tagConfigChange($event.target.value, 'warning', selectedTagValueConfig.id, tagsService.language)" 
+    autocomplete="off"
+      placeholder="Warning">
+  </mat-form-field>
+
+  <!-- DEPRECATED -->
+  <div style="margin:5px;">
+    <mat-slide-toggle 
+    [checked] = "selectedTagValueConfig.deprecated"
+    (change)="tagConfigChange($event.checked, 'deprecated', selectedTagValueConfig.id, tagsService.language)" 
+    >
+      Deprecated / hidden ?
+    </mat-slide-toggle>
+    <span *ngIf="selectedTagValueConfig.deprecated" style="    font-weight: bold; color: red;">
+      This tag is deprecated (or hidden),  it will not appear in the proposalss
+    </span>
+  </div>
+
+
+  <h4>Presets</h4>
+
+  <table *ngIf="tagsService.presetsConfig  as presetsConfig">
+    <tr *ngFor="let presetId of selectedTagValueConfig.presets; let i = index">
+      <td>{{ presetsConfig[presetId]?.key}}</td>
+      <td>{{ presetsConfig[presetId]?.lbl[tagsService.language] ? presetsConfig[presetId]?.lbl[tagsService.language] : presetsConfig[presetId]?.lbl['en'] }}</td>
+      <td>{{presetsConfig[presetId]?.type}}</td>
+      <td> <span *ngIf="['list', 'select'].includes(presetsConfig[presetId]?.type)"> {{presetsConfig[presetId]?.tags?.length}} </span></td>
+      <td> <span *ngIf="presetsConfig[presetId].countryCodes"> {{presetsConfig[presetId].countryCodes || json}}</span></td>
+      <td>
+        <button mat-raised-button color="primary"
+          (click)="openPresetsDialog('update',selectedTagValueConfig.id, presetsConfig[presetId])">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+      <td>
+        
+        <button mat-raised-button color="warn"
+        (click) ="deletePresetFromTag(selectedTagValueConfig.id, presetId, selectedTagValueConfig.presets)" 
+        >
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+
+      <button class="buttonMove" mat-raised-button  *ngIf="i > 0" 
+          (click)="optionChangeOrder(i, i-1)"> <mat-icon>keyboard_arrow_up</mat-icon> </button>
+
+      <button class="buttonMove" mat-raised-button  *ngIf="i < selectedTagValueConfig.presets.length -1" 
+      (click)="optionChangeOrder(i, i+1)"><mat-icon>keyboard_arrow_down</mat-icon> </button>
+
+      <button class="buttonMove" mat-raised-button *ngIf="i > 0" 
+          (click)="optionChangeOrder(i, 0)"><mat-icon>vertical_align_top</mat-icon></button>
+
+      <button class="buttonMove" mat-raised-button  *ngIf="i < selectedTagValueConfig.presets.length -1" 
+      (click)="optionChangeOrder(i, selectedTagValueConfig.presets.length -1)"><mat-icon>vertical_align_bottom</mat-icon></button>
+
+    </td>
+    </tr>
+  
+ 
+  </table>
+
+    <!-- sepecific country -->
+  <div *ngIf="selectedTagValueConfig.presetsByCountryCodes"> 
+    {{selectedTagValueConfig.presetsByCountryCodes | json}}
+      
+  </div>
+
+  <button mat-raised-button color="primary"
+  (click)="openPresetsDialog('add',selectedTagValueConfig.id,{type: 'text', lbl: '', tags: []})">
+  <mat-icon>add</mat-icon> Add a preset</button>
+
+
+
+
+</div>

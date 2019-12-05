@@ -1,0 +1,6 @@
+{
+    "jwtSecret": "dada",
+    "osmGoAssetsPath" : "/home/fabien/Projets/OsmGo/src/assets",
+    "iconSVG": "/home/fabien/Projets/OsmGo/resources/IconsSVG",
+    "logPath": "/data/OsmGo/logs.json"
+}

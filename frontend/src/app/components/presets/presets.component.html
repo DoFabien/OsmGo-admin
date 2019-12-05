@@ -1,0 +1,115 @@
+<mat-toolbar color="primary">
+        <!-- <button mat-button routerLink="/"> <mat-icon>home</mat-icon></button> -->
+        {{this.tagsService.language }}
+        <button mat-button [routerLink]="'/tags/'+this.tagsService.language"> Tags </button>
+    
+    </mat-toolbar>
+
+<div class="presetsList" *ngIf="presets">
+        <form >
+                <mat-form-field class="example-full-width">
+                  <input matInput  placeholder="Search" [value]="searchTerm" autocomplete="off"  (keyup)='keyUp.next($event)'>
+                </mat-form-field>
+              </form>
+            
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>key</th>
+                <th>label</th>
+                <th>Country code</th>
+                <th>type</th>
+                <th>Tags used</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of presets | searchPresets:searchTerm:tagsService.language" (click)="selectPreset(p)">
+                <td>{{p._id}}</td>
+                <td>{{p.key}}</td>
+                <td>{{p.lbl[tagsService.language]}}</td>
+                <td> <span *ngIf="p.countryCodes"> {{p.countryCodes.length}}</span></td> 
+                <td>{{p.type}}</td>
+                <td>{{p.usedByTagsCount}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="selectedPresets" *ngIf="selectedPreset">
+    <!-- {{selectedPreset | json}} -->
+    <!-- <button (click)="updatePreset(selectedPreset)">TEST</button>
+
+    <div class="selectedPresetdiv">
+        
+    </div> -->
+    <div class="selectedPresetdiv">
+        <p> Key : {{selectedPreset.key}}</p> 
+        <p> Id : {{selectedPreset._id}} </p>
+        <p> Country codes : <span *ngIf="selectedPreset.countryCodes"> {{selectedPreset.countryCodes || json}}</span> </p>
+       
+    </div>
+
+    <button mat-raised-button color="warn" 
+    (click)="deletePresetCascade(selectedPreset._id)">delete</button>
+
+    <button mat-button (click)="toOsmPage(selectedPreset.key)"> OSM WIKI PAGE </button>
+    <div class="selectedPresetdiv">
+            <mat-form-field>
+                    <input matInput placeholder="Label" autocomplete="off" 
+                    [value]="selectedPreset.lbl && selectedPreset.lbl[tagsService.language] ? selectedPreset.lbl[tagsService.language] : ''" 
+                    (change)="labelChange($event, selectedPreset, tagsService.language )">
+            </mat-form-field>
+
+    </div>
+    <div class="selectedPresetdiv">
+        type : {{selectedPreset.type}}
+    </div>
+    <div class="selectedPresetdiv">
+        Is used by {{selectedPreset.usedByTagsCount}} tags
+    </div>
+    <button mat-raised-button color="primary" 
+        (click)="displayTagsUsed = !displayTagsUsed">
+        Is used by {{selectedPreset.usedByTagsCount}} tags 
+    </button>
+
+
+    <div class="tagsUsed" *ngIf="displayTagsUsed">
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>tags</th>
+                        <th>Label</th>
+                        <th></th>
+    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tag of selectedPreset.usedByTags">
+                        <td>{{ tag.id }}</td>
+                        <td>{{tag.tags | json }}</td>
+                        <td>{{tag.lbl[tagsService.language] ? tag.lbl[tagsService.language] : tag.lbl['en']}}</td>
+                        <td>  
+                            <button mat-button color="warn"
+                            (click)="deletePresetFromTag(tag, selectedPreset._id) "
+                            > <mat-icon> delete</mat-icon> </button> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    
+        </div>
+
+
+    <div class="tagsList" *ngIf="['list','select'].includes(selectedPreset.type)">
+        <app-presets-options 
+        [selectedPreset] = selectedPreset 
+        [language]= "this.tagsService.language"
+        (presetChange)="this.updatePreset($event.options, 'options',selectedPreset._id,tagsService.language )"></app-presets-options>
+    </div>
+
+
+
+
+</div>
