@@ -35,6 +35,7 @@
     <tr>
       <th>icon</th>
       <th></th>
+      <th></th>
       <th class="pointer">Key</th>
       <th (click)="changeOrder('lbl')" class="pointer">Label</th>
       <th>Presets</th>
@@ -56,6 +57,9 @@
 
       <td>
         <mat-icon *ngIf="primaryTagValueConfig.deprecated"> warning</mat-icon>
+      </td>
+      <td>
+        <mat-icon *ngIf="primaryTagValueConfig.searchable !== undefined && primaryTagValueConfig.searchable === false"> zoom_out</mat-icon>
       </td>
       <td>{{primaryTagValueConfig.tags | json}}</td>
       <td>{{primaryTagValueConfig.lbl[tagsService.language] ? primaryTagValueConfig.lbl[tagsService.language] : null}}</td>
@@ -145,19 +149,32 @@
       placeholder="Warning">
   </mat-form-field>
 
+
+    <!-- Searchable -->
+    <div style="margin:5px;">
+      <mat-slide-toggle 
+      [checked] = "selectedTagValueConfig.searchable === false ? false : true"
+      (change)="tagConfigChange($event.checked, 'searchable', selectedTagValueConfig.id, tagsService.language)" 
+      >
+      Searchable ?
+      </mat-slide-toggle>
+      <span *ngIf="selectedTagValueConfig.deprecated" style="    font-weight: bold; color: red;">
+        This means that they will be recognized by Osm Go when editing existing data, but will not be available as an option when adding new features.
+      </span>
+    </div>
+
   <!-- DEPRECATED -->
   <div style="margin:5px;">
     <mat-slide-toggle 
     [checked] = "selectedTagValueConfig.deprecated"
     (change)="tagConfigChange($event.checked, 'deprecated', selectedTagValueConfig.id, tagsService.language)" 
     >
-      Deprecated / hidden ?
+      Deprecated ?
     </mat-slide-toggle>
     <span *ngIf="selectedTagValueConfig.deprecated" style="    font-weight: bold; color: red;">
-      This tag is deprecated (or hidden),  it will not appear in the proposalss
+      This tag is deprecated, it will not appear in the proposals
     </span>
   </div>
-
 
   <h4>Presets</h4>
 

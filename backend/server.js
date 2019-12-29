@@ -236,7 +236,7 @@ app.delete("/api/tag/", async (req, res) => {
 
   tags = tags.filter(t => t.id !== data.tagId);
 
-  fs.writeFileSync(tagsPath, stringify(tags), 'utf8')
+  fs.writeFileSync(tagsPath, stringify(tagsConfig), 'utf8')
   res.send({ status: "ok" });
   addLog("deleteTagConfig", data);
   io.emit("deleteTagConfig", data);
