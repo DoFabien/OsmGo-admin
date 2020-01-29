@@ -18,7 +18,7 @@ export class DialogIconComponent implements OnInit {
 
 
   selectNewIcon(iconName: string) {
-    console.log(this.data)
+    // console.log(this.data)
     this.tagsService.updateTagConfig$(iconName, 'icon', this.data.tagConfig.id, null).subscribe()
     // this.tagService.tagConfigChange(this.selectedTagValueConfig.presets, 'presets', this.selectedTagValueConfig.id, null);
 

@@ -12,7 +12,7 @@ OsmGo-admin is a webapp allowing to :
 There is no data in this directory. 
 You must configure the paths of the different files in _backend/config.json_ ( example : config.example.json)
 
-The application will edit 2 json files : tags.json and presets.json (in src/assets/tags&presets/ of Osm Go! repo) 
+The application will edit 2 json files : tags.json and presets.json (in src/assets/tagsAndPresets/ of Osm Go! repo) 
 The application will log each change to refer to the authors
 
 ```sh 

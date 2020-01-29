@@ -77,7 +77,8 @@
   <h4> {{ selectedTagValueConfig.tags | json}} </h4>
   <div style="width: 32px;height: 32px; display: inline-block"
     [ngStyle]="{'background-color': selectedTagValueConfig.markerColor}"
-    (click)="openDialogIconsSelector(selectedTagValueConfig)">
+    
+    >
     <img *ngIf="selectedTagValueConfig.icon" width="24px" height="24px" style="padding: 4px" class="svg-icon"
       [src]="'./api/svg/'+ selectedTagValueConfig.icon" />
 

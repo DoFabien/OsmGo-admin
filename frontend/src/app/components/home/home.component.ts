@@ -4,8 +4,6 @@ import { TagsService } from '../../services/tags.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as jwtDecode from 'jwt-decode';
 import { MatDialog } from '@angular/material';
-import { AddUiLanguageComponent } from '../add-ui-language/add-ui-language.component';
-import { AddNewConfigurationComponent } from '../add-new-configuration/add-new-configuration.component';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -100,29 +98,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  openAddLanguageUI(): void {
-    const dialogRef = this.dialog.open(AddUiLanguageComponent, {
-      height: '80%',
-      width: '80%'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.dataService.getI18Config$()
-      .subscribe()
-    });
-  }
-
-  openAddNewConfig(): void {
-    const dialogRef = this.dialog.open(AddNewConfigurationComponent, {
-      height: '80%',
-      width: '80%'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.dataService.getI18Config$()
-      .subscribe()
-    });
-  }
 
   
 }

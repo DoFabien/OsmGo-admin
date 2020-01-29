@@ -34,13 +34,13 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
-const presetsPath = path.join(osmGoAssetsPath, "tags&presets", "presets.json");
+const presetsPath = path.join(osmGoAssetsPath, "tagsAndPresets", "presets.json");
 const i18nPath = path.join(osmGoAssetsPath, "i18n", "i18n.json");
 
 const i18nLanguages = JSON.parse( fs.readFileSync(i18nPath), 'utf8').language;
 
-const tagsPath = path.join(osmGoAssetsPath, "tags&presets", "tags.json");
-const baseMapPath = path.join(osmGoAssetsPath, "tags&presets", "basemap.json");
+const tagsPath = path.join(osmGoAssetsPath, "tagsAndPresets", "tags.json");
+const baseMapPath = path.join(osmGoAssetsPath, "tagsAndPresets", "basemap.json");
 
 let tagsConfig = fs.readJSONSync(tagsPath, "utf8");
 let tags = tagsConfig.tags;
@@ -133,6 +133,12 @@ app.get("/api/OsmGoTags/", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.send(tags);
 });
+
+app.get("/api/OsmGoTagsConfig/", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.json(tagsConfig);
+});
+
 
 app.get("/api/OsmGoPresets/", (req, res) => {
   res.setHeader("Content-Type", "application/json");

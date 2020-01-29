@@ -33,7 +33,7 @@ export class DialogModifyPresetsAppComponent {
     @Inject(MAT_DIALOG_DATA) public data) {
 
       this.presets = {...this.data.presets};
-      console.log(this.data);
+      // console.log(this.data);
       // console.log(this.presets);
       this.typeModif = this.data.type;
       this.tagId = this.data.tagId;

@@ -12,23 +12,24 @@ echo $assetsOsmGoPath
 ssh -p $serverPort $serverUser@$serverHost "
 mkdir -p $serverPathFrontend
 mkdir -p $serverPathBackend
-mkdir -p $serverOsmGoAdminAssets/mapStyle/IconsSVG
+mkdir -p $serverOsmGoAdminAssets/IconsSVG
+mkdir -p $serverOsmGoAdminAssets/i18n
+mkdir -p $serverOsmGoAdminAssets/tagsAndPresets
 "
 
 cd ./frontend
 npm run build --prod
-cd ./dist
 
-rsync -e "ssh -p $serverPort" -avz ./ $serverUser@$serverHost:$serverPathFrontend
+rsync -e "ssh -p $serverPort" -avz ./dist/ $serverUser@$serverHost:$serverPathFrontend
 
-cd ../../../src/assets/i18n
-# rsync -e "ssh -p $serverPort" -avz   ./ $serverUser@$serverHost:$serverOsmGoAdminAssets/i18n
 
-cd ../mapStyle/IconsSVG
-rsync -e "ssh -p $serverPort" -avz   ./ $serverUser@$serverHost:$serverOsmGoAdminAssets/mapStyle/IconsSVG
+rsync -e "ssh -p $serverPort" -avz   $localOsmGoPath/src/assets/i18n/ $serverUser@$serverHost:$serverOsmGoAdminAssets/i18n/
+rsync -e "ssh -p $serverPort" -avz   $localOsmGoPath/src/assets/tagsAndPresets/ $serverUser@$serverHost:$serverOsmGoAdminAssets/tagsAndPresets/
+rsync -e "ssh -p $serverPort" -avz   $localOsmGoPath/resources/IconsSVG/ $serverUser@$serverHost:$serverOsmGoAdminAssets/IconsSVG/
+
 
 ## BACKEND
-cd ../../../../osmGoAdmin/backend
+cd ../backend
 ls
 rsync -e "ssh -p $serverPort" --exclude=node_modules --exclude=tmp --exclude=config.json --exclude=*.git -avz   ./ $serverUser@$serverHost:$serverPathBackend
 

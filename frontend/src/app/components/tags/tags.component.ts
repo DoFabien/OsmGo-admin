@@ -53,7 +53,7 @@ export class TagsComponent implements OnInit {
       this.tagsService.getPresets$()
     ).subscribe(([tagsConfig, presetsConfig]) => {
       // TODO: Loading
-      console.log(tagsConfig, presetsConfig);
+      // console.log(tagsConfig, presetsConfig);
     })
 
 
@@ -70,7 +70,7 @@ export class TagsComponent implements OnInit {
     // presets has change
     this.tagsService.wsUpdatePresetConfig$()
       .subscribe(presetConfigChange => {
-        console.log(presetConfigChange);
+        // console.log(presetConfigChange);
         this.updatePresetConfig(presetConfigChange)
       })
 
@@ -90,11 +90,11 @@ export class TagsComponent implements OnInit {
 
 
   updatePresetConfig(changes) {
-    console.log(changes);
+    // console.log(changes);
     let currentPresetConfig = this.tagsService.presetsConfig[changes.presetId];
 
     // let currentTagConfig = tags[pkey].values.find( o => o.id === data.tagConfigId)
-    console.log(currentPresetConfig);
+    // console.log(currentPresetConfig);
 
     if (changes.key === 'lbl') {
       currentPresetConfig[changes.key][changes.language] = changes.newValue
@@ -110,7 +110,7 @@ export class TagsComponent implements OnInit {
   deleteTag(tagId) {
 
     this.tagsService.deleteTag(tagId).subscribe(deleted => {
-      console.log(deleted);
+      // console.log(deleted);
       // this.tagsService.tagsConfig[key].values = this.tagsService.tagsConfig[key].values.filter(f => f.key !== value);
     });
 
@@ -118,7 +118,7 @@ export class TagsComponent implements OnInit {
   }
 
   changeGeometry(checked, idgeom, tagId, geometry){
-    console.log(checked, idgeom, tagId, geometry)
+    // console.log(checked, idgeom, tagId, geometry)
     if (checked){
       if (!geometry.includes(idgeom)){
         geometry.push(idgeom)
@@ -210,7 +210,7 @@ export class TagsComponent implements OnInit {
 
   tagConfigChange(newValue, key, tagConfigId, language) {
     this.tagsService.updateTagConfig$(newValue, key, tagConfigId, language).subscribe()
-    console.log('tagConfigChange', newValue, key, tagConfigId, language)
+    // console.log('tagConfigChange', newValue, key, tagConfigId, language)
    
   }
 
@@ -245,7 +245,7 @@ export class TagsComponent implements OnInit {
 
   optionChangeOrder(index, newIndex) {
     this.array_move(this.selectedTagValueConfig.presets, index, newIndex);
-    console.log(this.selectedTagValueConfig.presets);
+    // console.log(this.selectedTagValueConfig.presets);
 
     this.tagConfigChange(this.selectedTagValueConfig.presets, 'presets', this.selectedTagValueConfig.id, null);
 

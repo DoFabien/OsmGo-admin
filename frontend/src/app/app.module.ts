@@ -27,8 +27,6 @@ import { HomeComponent } from './components/home/home.component';
 import { TranslateUiComponent } from './components/translate-ui/translate-ui.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { OrderByPipe } from './pipe/order-by.pipe';
-import { AddUiLanguageComponent } from './components/add-ui-language/add-ui-language.component';
-import { AddNewConfigurationComponent } from './components/add-new-configuration/add-new-configuration.component';
 import { SettingPkeyComponent } from './components/setting-pkey/setting-pkey.component';
 import { PresetsComponent } from './components/presets/presets.component';
 
@@ -46,7 +44,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent, DialogModifyPresetsAppComponent, KeyPipe, FilterByKeyLblPipe, 
-    DialogIconComponent, FilterByNamePipe, DialogAddPrimaryValueComponent, TagsComponent, HomeComponent, TranslateUiComponent, OrderByPipe, AddUiLanguageComponent, AddNewConfigurationComponent, SettingPkeyComponent, 
+    DialogIconComponent, FilterByNamePipe, DialogAddPrimaryValueComponent, TagsComponent, HomeComponent, TranslateUiComponent, OrderByPipe, SettingPkeyComponent, 
     PresetsComponent, PresetsOptionsComponent, SearchTagsPipe, SearchPresetsPipe,
   ],
   imports: [
@@ -61,8 +59,7 @@ const appRoutes: Routes = [
   ],
   providers: [CookieService],
   entryComponents: [DialogModifyPresetsAppComponent, DialogIconComponent, DialogAddPrimaryValueComponent,
-    SettingPkeyComponent,
-    AddUiLanguageComponent, AddNewConfigurationComponent],
+    SettingPkeyComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
