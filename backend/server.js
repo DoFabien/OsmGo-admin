@@ -191,6 +191,7 @@ app.post("/api/tag/", async (req, res) => {
     res.status(401).send("unautorized");
     return;
   }
+ 
   let data = req.body;
 
   // todo => from tags
@@ -198,6 +199,7 @@ app.post("/api/tag/", async (req, res) => {
 
   data["pkey"] = pkey;
   data["userId"] = user.id;
+  data["display_name"] = user.display_name;
   data["time"] = new Date().getTime();
   let currentTagConfig = tags.find(o => o.id === data.tagConfigId);
 
@@ -238,6 +240,7 @@ app.delete("/api/tag/", async (req, res) => {
   let data = req.body;
 
   data["userId"] = user.id;
+  data["display_name"] = user.display_name;
   data["time"] = new Date().getTime();
 
   tags = tags.filter(t => t.id !== data.tagId);
@@ -261,6 +264,7 @@ app.post("/api/preset/", async (req, res) => {
   }
   let data = req.body;
   data["userId"] = user.id;
+  data["display_name"] = user.display_name;
   data["time"] = new Date().getTime();
 
   let currentPreset = presets[data.presetId];
@@ -291,6 +295,7 @@ app.delete("/api/preset/", async (req, res) => {
   let data = req.body;
 
   data["userId"] = user.id;
+  data["display_name"] = user.display_name;
   data["time"] = new Date().getTime();
   const presetId = data["presetId"];
 
@@ -371,6 +376,7 @@ app.post("/api/UiTranslation/", async (req, res) => {
 
   const data = req.body;
   data["userId"] = user.id;
+  data["display_name"] = user.display_name;
   data["time"] = new Date().getTime();
 
   if (uiTranslations[data.language]){
